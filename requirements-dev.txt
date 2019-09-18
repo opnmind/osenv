@@ -5,4 +5,4 @@ flake8-import-order
 #flake8-typing-imports
 pep8-naming
 tox
-black
+#black
