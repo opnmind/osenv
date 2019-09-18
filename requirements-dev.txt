@@ -2,7 +2,7 @@ flake8
 flake8-colors
 flake8-docstrings
 flake8-import-order
-flake8-typing-imports
+#flake8-typing-imports
 pep8-naming
 tox
 black
