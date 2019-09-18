@@ -67,7 +67,9 @@ if "ResourceWarning" not in vars(builtins):
 
 try:
     keyring.set_password("TESTSYS", "BACKEND_TEST", "OK")
-    keyring.get_password("TESTSYS", "BACKEND_TEST")
+    password = keyring.get_password("TESTSYS", "BACKEND_TEST")
+    if password is not "OK":
+        raise RuntimeError
     keyring.delete_password("TESTSYS", "BACKEND_TEST")
     keyring_backend_available = True
 except RuntimeError:
