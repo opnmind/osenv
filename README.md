@@ -5,12 +5,12 @@
 
 Idee: Einen Token generieren der vorübergehend Zugriff gewährt
 
-[x] 1. set 0600 to .enc file
-[x] 2. the 0600 is required to work with that file
-[ ] 3. find a alternative for using env vars
-[ ] 4. add edit function to change one password from a existing list (partly)
-[x] 5. add to write function to add a new tenant to an existing list
-[ ] 6. better description to activate keyring
+- [x] set 0600 to .enc file
+- [x] the 0600 is required to work with that file
+- [ ] find a alternative for using env vars
+- [ ] add edit function to change one password from a existing list (partly)
+- [x] add to write function to add a new tenant to an existing list
+- [ ] better description to activate keyring
 
 ## Requirements
 
