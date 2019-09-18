@@ -15,7 +15,7 @@ script:
 sudo: true
 before_install:
   - sudo apt-get install libgnome-keyring-dev
-  - dbus-run-session -- bash echo -n "mypassword" | gnome-keyring-daemon --daemonize
+  - echo -n "mypassword" | gnome-keyring-daemon --daemonize
 #deploy:
 #  provider: releases
 #  api_key: "GITHUB OAUTH TOKEN"
