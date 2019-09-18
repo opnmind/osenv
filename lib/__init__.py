@@ -1,0 +1,6 @@
+"""OSENV CLI Tool."""
+_program = "osenv"
+_description = "Create and load .ostackrc credentials confidentialy."
+_author = "opnmind"
+_url = "https://github.com/opnmind/osenv"
+__version__ = "0.6.1"

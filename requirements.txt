@@ -1,0 +1,4 @@
+console-menu
+cryptography
+keyring
+paramiko

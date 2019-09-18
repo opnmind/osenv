@@ -1,0 +1,14 @@
+*~
+**venv
+**py37
+.vscode
+*__pycache__
+*.pytest_cache
+*.enc
+.ostackrc*
+.s3rc*
+**old
+*.egg-info
+**dist
+**build
+**.tox
