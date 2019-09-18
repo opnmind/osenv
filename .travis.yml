@@ -12,7 +12,10 @@ install:
 script:
   - make unittest
   - make flake8
-  - 
+addons:
+  apt:
+    packages:
+      - libgnome-keyring-dev
 #deploy:
 #  provider: releases
 #  api_key: "GITHUB OAUTH TOKEN"
