@@ -12,10 +12,20 @@ install:
 script:
   - make unittest
   - make flake8
-sudo: true
-before_install:
-  - sudo apt-get install libgnome-keyring-dev
-  - echo -n "mypassword" | gnome-keyring-daemon --daemonize
+
+sudo: required
+addons:
+  apt:
+    packages:
+      - python-gnomekeyring
+      - gnome-keyring
+
+before_script:
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      dbus-launch /usr/bin/python -c \
+        "import gnomekeyring;gnomekeyring.create_sync('login', '');"
+    fi
 #deploy:
 #  provider: releases
 #  api_key: "GITHUB OAUTH TOKEN"
