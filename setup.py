@@ -63,27 +63,30 @@ class SetupSupport:
             return
 
         # mkdir ~/.bashrc.d
-        os.mkdir("{home_path}/.bashrc.d".format(home_path=home), 0o700)
-        
-        print("bashrc.d will be installed...")
-        script = """
+        if not os.path.isdir("{home_path}/.bashrc.d".format(home_path=home)):
+            os.mkdir("{home_path}/.bashrc.d".format(home_path=home), 0o700)
+
+        with open(bashrc) as filehandler:
+            if not "for file in ~/.bashrc.d/*.bashrc;" in filehandler.read():
+                
+                print("bashrc.d will be installed...")
+                script = """
 # Added by osenv
 for file in ~/.bashrc.d/*.bashrc;
 do
     source "$file"
 done
 """
-        # backup the file
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        shutil.copy2(src=bashrc, dst="{0}.bak.{1}".format(bashrc, timestr))
+                # backup the file
+                timestr = time.strftime("%Y%m%d-%H%M%S")
+                shutil.copy2(src=bashrc, dst="{0}.bak.{1}".format(bashrc, timestr))
 
-        # add new one
-        with open(bashrc, "a") as bashrc_fh:
-            bashrc_fh.write(script)
+                # add new one
+                filehandler.write(script)
         
+        #if not os.path.isfile("{0}/.bashrc.d/10-osenv.bashrc".format(home)):
         shutil.copy2(src=".bashrc.d/10-osenv.bashrc", dst="{0}/.bashrc.d/10-osenv.bashrc".format(home))
         print("osenv to bashrc.d successful added.")
-
 
 class CustomInstallCommand(install):
     """Customized setuptools install command - prints a friendly greeting."""

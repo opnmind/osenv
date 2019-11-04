@@ -10,21 +10,21 @@ osenv() {
         # source environment
         if [[ $arg1 == "-e" ]]; then
             echo "Load .ostackrc for ${arg2}"
-            $(os-env -e ${arg2})
+            $(osenv-tool -e ${arg2})
 
         # clean up
         elif [[ $arg1 == "-c" ]]; then
             echo "Clean up .ostackrc variables."
-            $(os-env -c)
+            $(osenv-tool -c)
         
         # read 
         elif [[ $arg1 == "-r" ]]; then
             echo "Read encoded .ostackrc file."
-            $(os-env -r ${arg2})
+            $(osenv-tool -r ${arg2})
 
         # forward the rest
         else
-            os-env $@
+            osenv-tool $@
         fi
     do
         echo "Command os-env not found. Please load the correct virtualenv."
