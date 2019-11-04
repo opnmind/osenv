@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/opnmind/osenv.svg?branch=master)](https://travis-ci.org/opnmind/osenv)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-# osenv - OpenStack Environment loader
+# osenv-tool - OpenStack Environment loader
 
 ## TODO
 
@@ -41,21 +41,21 @@ $ pip install git@<git-url>:<username>/osenv.git
 1. Create an encrypted configuration file with all your needed credentials. (RSA Encryption with 4096 bit Key)
 
 ```shell
-$ osenv -w [.ostackrc.enc]
+$ osenv-tool -w [.ostackrc.enc]
 ```
 
 2. Put your configuration into gnome-keyring.
 
 ```shell
-$ osenv -r [.ostackrc.enc]
+$ osenv-tool -r [.ostackrc.enc]
 # better for automatic source given output
-$ $(osenv -r [.ostackrc.enc])
+$ $(osenv-tool -r [.ostackrc.enc])
 ```
 
 3. List available environment's.
 
 ```shell
-$ osenv -l
+$ osenv-tool -l
 PROD
 PREPROD
 ```
@@ -63,28 +63,28 @@ PREPROD
 4. Load a given environment.
 
 ```shell
-$ osenv -e PROD
+$ osenv-tool -e PROD
 # better for automatic source given output
-$ $(osenv -e PROD)
+$ $(osenv-tool -e PROD)
 ```
 
 5. Unset ENV variables if environment isn't needed anymore.
 
 ```shell
-$ osenv -c
+$ osenv-tool -c
 # better for automatic source given output
-$ $(osenv -c)
+$ $(osenv-tool -c)
 ```
 
 6. Edit a existing encoded file.
 
 ```shell
-$ osenv -i [.ostackrc.enc]
+$ osenv-tool -i [.ostackrc.enc]
 ```
 
 ## Usage with bashrc
 
-Now the setup process added the snippet durring the installation to the .bashrc filehistory.
+Now the setup process added the snippet durring the installation to the .bashrc.d directory as 10-osenv.bashrc file.
 
 DEPRECATED: If you want the full support, then you have to add those code snippet to you ~/.bashrc.
 With this little trick you are able to source the user variables in your shell session.
@@ -115,21 +115,21 @@ osenv() {
     # source environment
     if [[ $arg1 == "-e" ]]; then
         echo "Load .ostackrc for ${arg2}"
-        $(osenv -e ${arg2})
+        $(osenv-tool -e ${arg2})
 
     # clean up
     elif [[ $arg1 == "-c" ]]; then
         echo "Clean up .ostackrc variables."
-        $(osenv -c)
+        $(osenv-tool -c)
     
     # read 
     elif [[ $arg1 == "-r" ]]; then
         echo "Read encoded .ostackrc file."
-        $(osenv -r ${arg2})
+        $(osenv-tool -r ${arg2})
 
     # forward the rest
     else
-        osenv $@
+        osenv-tool $@
     fi
 }
 ##--OSENV--END--##
@@ -139,14 +139,14 @@ osenv() {
 Everytime you expose only the active enviroment to the Session Variables.
 
 ```shell
-$ osenv -h
+$ osenv-tool -h
 ```
 
 ```log
-usage: osenv [-h]
+usage: osenv-tool [-h]
               (--version | -e <environment-name> | -l | -c | -r [<encoded-file>] | -w [<encoded-file>] | -i [<encoded-file>])
 
-Create and load ostackrc credentials confidentialy.
+Create and load .ostackrc credentials confidentialy.
 
 optional arguments:
   -h, --help            show this help message and exit
