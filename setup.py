@@ -66,7 +66,7 @@ class SetupSupport:
         if not os.path.isdir("{home_path}/.bashrc.d".format(home_path=home)):
             os.mkdir("{home_path}/.bashrc.d".format(home_path=home), 0o700)
 
-        with open(bashrc) as filehandler:
+        with open(bashrc, "w") as filehandler:
             if not "for file in ~/.bashrc.d/*.bashrc;" in filehandler.read():
                 
                 print("bashrc.d will be installed...")
@@ -83,7 +83,7 @@ done
 
                 # add new one
                 filehandler.write(script)
-        
+
         #if not os.path.isfile("{0}/.bashrc.d/10-osenv.bashrc".format(home)):
         shutil.copy2(src=".bashrc.d/10-osenv.bashrc", dst="{0}/.bashrc.d/10-osenv.bashrc".format(home))
         print("osenv to bashrc.d successful added.")
