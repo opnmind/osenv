@@ -16,7 +16,7 @@ import signal
 import sys
 
 from lib import __version__, _program, _description
-from lib.os_env_controller import OSEnvController
+from lib.osenv_controller import OSEnvController
 
 
 def signal_handler(sig, frame):
