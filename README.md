@@ -35,7 +35,7 @@ $ source venv/bin/active
 1. Install Requirements and osenv tool.
 
 ```shell
-$ pip install git@<git-url>:<username>/osenv.git
+$ pip install git+https://github.com/opnmind/osenv-tool.git
 ```
 
 1. Create an encrypted configuration file with all your needed credentials. (RSA Encryption with 4096 bit Key)
