@@ -81,7 +81,7 @@ if __name__ == "__main__":
         "-r",
         "--read",
         nargs="?",
-        const=".ostackrc.enc",
+        const="~/.ostackrc.enc",
         metavar="<encoded-file>",
         help="""Read encoded file and set content to session variables.
         Default filename is ~/.ostackrc.enc.""",
@@ -90,7 +90,7 @@ if __name__ == "__main__":
         "-w",
         "--write",
         nargs="?",
-        const=".ostackrc.enc",
+        const="~/.ostackrc.enc",
         type=str,
         metavar="<encoded-file>",
         help="""Create and write encoded file with multiple ostackrc
@@ -100,7 +100,7 @@ if __name__ == "__main__":
         "-i",
         "--edit",
         nargs="?",
-        const=".ostackrc.enc",
+        const="~/.ostackrc.enc",
         metavar="<encoded-file>",
         help="""Edit a encoded file and write it back.
         Default filename is ~/.ostackrc.enc.""",
