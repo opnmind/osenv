@@ -10,7 +10,7 @@ from consolemenu import SelectionMenu
 from lib.file_encryption import FileEncryption
 from lib.storage import Storage
 from lib.tenant import Tenant
-
+from lib import _program
 
 class OSEnvController:
 
@@ -43,7 +43,7 @@ class OSEnvController:
             storage.active_storage_backend == storage.STORAGE_BACKEND_SESSION
             and os.environ.get(Storage.SESSION_STORAGE_VARIABLE) is None
         ):
-            print('Active session not found. Please load with "osenv -r".')
+            print("Active session not found. Please load with \"{0} -r\".".format(_program))
             sys.exit(1)
 
         storage = Storage()
