@@ -84,7 +84,7 @@ if __name__ == "__main__":
         const=".ostackrc.enc",
         metavar="<encoded-file>",
         help="""Read encoded file and set content to session variables.
-        Default filename is .ostackrc.enc.""",
+        Default filename is ~/.ostackrc.enc.""",
     )
     group.add_argument(
         "-w",
@@ -94,7 +94,7 @@ if __name__ == "__main__":
         type=str,
         metavar="<encoded-file>",
         help="""Create and write encoded file with multiple ostackrc
-        environments. Default filename is .ostackrc.enc.""",
+        environments. Default filename is ~/.ostackrc.enc.""",
     )
     group.add_argument(
         "-i",
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         const=".ostackrc.enc",
         metavar="<encoded-file>",
         help="""Edit a encoded file and write it back.
-        Default filename is .ostackrc.enc.""",
+        Default filename is ~/.ostackrc.enc.""",
     )
     ###
 
