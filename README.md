@@ -6,12 +6,12 @@
 
 Idee: Einen Token generieren der vorübergehend Zugriff gewährt
 
-- [x] set 0600 to .enc file
-- [x] the 0600 is required to work with that file
 - [ ] find a alternative for using env vars
 - [ ] add edit function to change one password from a existing list (partly)
 - [x] add to write function to add a new tenant to an existing list
 - [ ] better description to activate keyring
+- [ ] move the bashrc integration from the installation process to the tool directly (e.g. osenv-tool --integrate-bashrc [-b])
+- [ ] Test case file encryption 
 
 ## Requirements
 
@@ -22,37 +22,37 @@ Idee: Einen Token generieren der vorübergehend Zugriff gewährt
 
 Steps to use:
 
-00. Setup virtual environment
+1. Setup virtual environment
 
 For virtualenv you can install "python2-virtualenv" or "python3-virtualenv" system package.
 
 ```shell
 # create a python 3 environment
 $ virtualenv -p /usr/bin/python3 venv
-$ source venv/bin/active
+$ source venv/bin/activate
 ```
 
-1. Install Requirements and osenv tool.
+2. Install Requirements and osenv tool.
 
 ```shell
 $ pip install git+https://github.com/opnmind/osenv-tool.git
 ```
 
-1. Create an encrypted configuration file with all your needed credentials. (RSA Encryption with 4096 bit Key)
+3. Create an encrypted configuration file with all your needed credentials. (RSA Encryption with 4096 bit Key)
 
 ```shell
-$ osenv-tool -w [.ostackrc.enc]
+$ osenv-tool -w [~/.ostackrc.enc]
 ```
 
-2. Put your configuration into gnome-keyring.
+4. Put your configuration into gnome-keyring.
 
 ```shell
-$ osenv-tool -r [.ostackrc.enc]
+$ osenv-tool -r [~/.ostackrc.enc]
 # better for automatic source given output
-$ $(osenv-tool -r [.ostackrc.enc])
+$ $(osenv-tool -r [~/.ostackrc.enc])
 ```
 
-3. List available environment's.
+5. List available environment's.
 
 ```shell
 $ osenv-tool -l
@@ -60,7 +60,7 @@ PROD
 PREPROD
 ```
 
-4. Load a given environment.
+6. Load a given environment.
 
 ```shell
 $ osenv-tool -e PROD
@@ -68,7 +68,7 @@ $ osenv-tool -e PROD
 $ $(osenv-tool -e PROD)
 ```
 
-5. Unset ENV variables if environment isn't needed anymore.
+7. Unset ENV variables if environment isn't needed anymore.
 
 ```shell
 $ osenv-tool -c
@@ -76,10 +76,10 @@ $ osenv-tool -c
 $ $(osenv-tool -c)
 ```
 
-6. Edit a existing encoded file.
+8. Edit a existing encoded file.
 
 ```shell
-$ osenv-tool -i [.ostackrc.enc]
+$ osenv-tool -i [~/.ostackrc.enc]
 ```
 
 ## Usage with bashrc
@@ -157,11 +157,11 @@ optional arguments:
   -c, --clean           Clean up active .ostackrc environment.
   -r [<encoded-file>], --read [<encoded-file>]
                         Read encoded file and set content to session
-                        variables. Default filename is .ostackrc.enc.
+                        variables. Default filename is ~/.ostackrc.enc.
   -w [<encoded-file>], --write [<encoded-file>]
                         Create and write encoded file with multiple ostackrc
-                        environments. Default filename is .ostackrc.enc.
+                        environments. Default filename is ~/.ostackrc.enc.
   -i [<encoded-file>], --edit [<encoded-file>]
                         Edit a encoded file and write it back. Default
-                        filename is .ostackrc.enc.
+                        filename is ~/.ostackrc.enc.
 ```
