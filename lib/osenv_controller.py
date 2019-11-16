@@ -11,6 +11,8 @@ from lib.file_encryption import FileEncryption
 from lib.storage import Storage
 from lib.tenant import Tenant
 from lib import _program
+import getpass
+from pprint import pprint
 
 class OSEnvController:
 
@@ -25,7 +27,7 @@ class OSEnvController:
 
         # print("List of available environments:\n")
         if data:
-            for i, osenv in data.items():
+            for osenv in data:
                 env = next(iter(osenv)).split("_")[0]
 
                 if env == args.environment:
@@ -52,7 +54,7 @@ class OSEnvController:
 
         # print("List of available environments:\n")
         if data:
-            for i, osenv in data.items():
+            for osenv in data:
                 env = next(iter(osenv)).split("_")[0]
                 print("{0}".format(env))
         else:
@@ -109,8 +111,18 @@ class OSEnvController:
             sys.exit(1)
 
         # read from file
+        userkey = None
+        try:
+            userkey = getpass.getpass(prompt="Input master key and press [ENTER]: ")
+            if userkey is not None and len(userkey) != 44:
+                print("Wrong key length {length}, encryption process aborted!".format(length=len(userkey)))
+                sys.exit(1)
+        except Exception as error:            
+            print("ERROR key", error)            
+            return None
+
         crypto = FileEncryption()
-        json_data = crypto.decrypt_configfile(input_file=args.read)
+        json_data = crypto.decrypt_configfile(input_file=args.read, key=userkey)
 
         # save to keyring
         storage = Storage()
@@ -118,9 +130,8 @@ class OSEnvController:
 
     @staticmethod
     def action_write(args):
-
         i = 0
-        data = {}
+        data = []
         selection_list = ["Add a new OpenStack Environment", "Encode and write file."]
 
         while True:
@@ -130,8 +141,8 @@ class OSEnvController:
                 osenv = input(
                     "Input environment name for configuration and press [ENTER]: "
                 )
-                data[i] = json.loads(OSEnvController.add_tenant(name=osenv))
-                i += 1
+                data.append(json.loads(OSEnvController.add_tenant(name=osenv)))
+                #i += 1
 
             elif selection == 1:
                 print("Encrypt and write file...")
@@ -149,9 +160,8 @@ class OSEnvController:
 
                 print("File {file} written ...".format(file=args.write))
                 print("Finish")
-                break
-                sys.exit(0)
-
+                return True
+                
             elif selection == 2:
                 print("Program termination ...")
                 # break
@@ -172,44 +182,56 @@ class OSEnvController:
             sys.exit(1)
 
         # read from file
+        userkey = None
+        try:
+            userkey = getpass.getpass(prompt="Input master key and press [ENTER]: ")
+            if userkey is not None and len(userkey) != 44:
+                print("Wrong key length {length}, encryption process aborted!".format(length=len(userkey)))
+                sys.exit(1)
+        except Exception as error:            
+            print("ERROR key", error)            
+            return None
+
         crypto = FileEncryption()
-        json_data = crypto.decrypt_configfile(input_file=args.edit)
+        json_data = crypto.decrypt_configfile(input_file=args.edit, key=userkey)
         data = json.loads(json_data)
 
         while True:
             # print("List of available environments:\n")
-            if data:
-                env_list = []
-                for i, osenv in data.items():
+            env_list = []
+            if data:                
+                for osenv in data:
                     env = next(iter(osenv)).split("_")[0]
-                    env_list.append("Edit {0} environment.".format(env))
+                    env_list.append("Delete {0} environment.".format(env))
             
             # Create menu
             selection_list = ["Add a new OpenStack Environment"]
             selection_list.extend(env_list)
             selection_list.append("Encode and write file {file}.".format(file=args.edit))
+            selection_list.append("Show data array")
             selection = SelectionMenu.get_selection(selection_list)
             
             i = len(env_list)
 
             if selection == 0:
+                # add new one
                 osenv = input(
                     "Input environment name for configuration and press [ENTER]: "
                 )
-                data["{0}".format(i)] = json.loads(OSEnvController.add_tenant(name=osenv))
-            elif selection > 0 and selection <= len(env_list):
-                print(data["{0}".format(selection - 1)])
-                pass
-                #OSEnvController.edit_tenant(name=, tenant_data=)
-
+                data.append(json.loads(OSEnvController.add_tenant(name=osenv)))
+            elif selection > 0 and selection <= i:
+                if not input("Are you sure? (y/n): ").lower().strip()[:1] == "y": break
+                data.pop(selection - 1)
             elif selection == len(env_list) + 1:
                 print("Encrypt and write file...")
-                print(data)
-                crypto.encrypt_configfile(data=json.dumps(data), output_file=args.edit)
-                print("Finish")
-                break
+                crypto.encrypt_configfile(data=json.dumps(data), output_file=args.edit, key=userkey)
                 sys.exit(0)
             elif selection == len(env_list) + 2:
+                print("Show data ...")
+                pprint(data)
+                pprint(env_list)
+                input("Press Enter to continue...")
+            elif selection == len(env_list) + 3:
                 print("Program termination ...")
                 sys.exit(0)
 

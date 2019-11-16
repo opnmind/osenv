@@ -42,38 +42,30 @@ class FileEncryption(object):
         return key
 
     def encrypt_configfile(self, data, output_file, key=None):
-        
-        if key is not None and len(key) == 44:
-            self.key = key
-        elif key is None and self.key is None:
-            self.key = Fernet.generate_key()
+        if key is None:
+            key = Fernet.generate_key()
         elif key is not None and len(key) != 44:
             print("Wrong key length {length}, encryption process aborted!".format(length=len(key)))
             return None
         
         print(
             "{ds}\n# YOUR KEY: {k}\n{ds}".format(
-                k=self.key, ds="#" * 30
+                k=key, ds="#" * 30
             )
         )
 
-        fernet = Fernet(self.key)
+        fernet = Fernet(key)
         encrypted = fernet.encrypt(bytes(data, "utf-8"))
 
         with open(output_file, "wb") as f:
             f.write(encrypted)
 
-    def decrypt_configfile(self, input_file):
+    def decrypt_configfile(self, input_file, key):
         with open(input_file, "rb") as f:
             data = f.read()
-
+   
         try:
-            self.key = getpass.getpass(prompt="Input master key and press [ENTER]: ")
-        except Exception as error:
-            print("ERROR key", error)
-
-        try:
-            fernet = Fernet(self.key)
+            fernet = Fernet(key)
             decrypted = fernet.decrypt(data)
         except Exception as error:
             print("ERROR: {0} (Wrong password.)".format(error))

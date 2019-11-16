@@ -9,7 +9,8 @@ Links:
 Later:
     bash-completion
     https://debian-administration.org/article/317/An_introduction_to_bash_completion_part_2
-
+    
+    https://github.com/kislyuk/argcomplete/
 """
 import argparse
 import signal
