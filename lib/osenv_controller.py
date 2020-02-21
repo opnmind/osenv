@@ -134,11 +134,19 @@ class OSEnvController:
     def action_write(args):
         i = 0
         data = []
-        selection_list = ["Add a new OpenStack Environment", "Encode and write file."]
+        selection_list = ["Add a new OpenStack Environment"]
 
         encoded_file = os.path.expanduser(args.write)
 
         while True:
+            env_list = []
+            if data:                
+                for osenv in data:
+                    env = next(iter(osenv)).split("_")[0]
+                    env_list.append("Delete {0} environment.".format(env))
+            
+            selection_list.extend(env_list)
+            selection_list.append("Encode and write file {file}.".format(file=encoded_file))
             selection = SelectionMenu.get_selection(selection_list)
 
             if selection == 0:
@@ -213,7 +221,7 @@ class OSEnvController:
             # Create menu
             selection_list = ["Add a new OpenStack Environment"]
             selection_list.extend(env_list)
-            selection_list.append("Encode and write file {file}.".format(file=args.edit))
+            selection_list.append("Encode and write file {file}.".format(file=encoded_file))
             selection_list.append("Show data array")
             selection = SelectionMenu.get_selection(selection_list)
             
