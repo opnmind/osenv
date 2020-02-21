@@ -100,14 +100,16 @@ class OSEnvController:
     @staticmethod
     def action_read(args):
 
-        if not os.path.isfile(args.read):
-            print("{0} file not found.".format(args.read))
+        encoded_file = os.path.expanduser(args.read)
+
+        if not os.path.isfile(encoded_file):
+            print("{0} file not found.".format(encoded_file))
             sys.exit(1)
 
         # check permissions 0600
-        st = os.stat(args.read)
+        st = os.stat(encoded_file)
         if oct(st.st_mode) > OSEnvController.FILE_PERMISSION:
-            print("File {0} has the wrong permissions. \"0600\" are required.".format(args.read))
+            print("File {0} has the wrong permissions. \"0600\" are required.".format(encoded_file))
             sys.exit(1)
 
         # read from file
@@ -122,7 +124,7 @@ class OSEnvController:
             return None
 
         crypto = FileEncryption()
-        json_data = crypto.decrypt_configfile(input_file=args.read, key=userkey)
+        json_data = crypto.decrypt_configfile(input_file=encoded_file, key=userkey)
 
         # save to keyring
         storage = Storage()
@@ -133,6 +135,8 @@ class OSEnvController:
         i = 0
         data = []
         selection_list = ["Add a new OpenStack Environment", "Encode and write file."]
+
+        encoded_file = os.path.expanduser(args.write)
 
         while True:
             selection = SelectionMenu.get_selection(selection_list)
@@ -147,18 +151,18 @@ class OSEnvController:
             elif selection == 1:
                 print("Encrypt and write file...")
                 crypto = FileEncryption()
-                crypto.encrypt_configfile(data=json.dumps(data), output_file=args.write)
+                crypto.encrypt_configfile(data=json.dumps(data), output_file=encoded_file)
 
-                if not os.path.isfile(args.write):
-                    print("{0} file not found.".format(args.write))
+                if not os.path.isfile(encoded_file):
+                    print("{0} file not found.".format(encoded_file))
                     break
                     
                 try:
-                    os.chmod(args.write, 0o600)
+                    os.chmod(encoded_file, 0o600)
                 except OSError as e:
                     print("Couldn't change file permissions to 0600. Please change it, otherwise you are not able to read this file. [{0}]".format(e))
 
-                print("File {file} written ...".format(file=args.write))
+                print("File {file} written ...".format(file=encoded_file))
                 print("Finish")
                 return True
                 
@@ -170,15 +174,17 @@ class OSEnvController:
 
     @staticmethod
     def action_edit(args):
+        encoded_file = os.path.expanduser(args.edit)
+
         # Check if file exists
-        if not os.path.isfile(args.edit):
-            print("{0} file not found.".format(args.edit))
+        if not os.path.isfile(encoded_file):
+            print("{0} file not found.".format(encoded_file))
             sys.exit(1)
         
         # check permissions 0600
-        st = os.stat(args.edit)
+        st = os.stat(encoded_file)
         if oct(st.st_mode) > OSEnvController.FILE_PERMISSION:
-            print("File {0} has the wrong permissions. \"0600\" are required.".format(args.edit))
+            print("File {0} has the wrong permissions. \"0600\" are required.".format(encoded_file))
             sys.exit(1)
 
         # read from file
@@ -193,7 +199,7 @@ class OSEnvController:
             return None
 
         crypto = FileEncryption()
-        json_data = crypto.decrypt_configfile(input_file=args.edit, key=userkey)
+        json_data = crypto.decrypt_configfile(input_file=encoded_file, key=userkey)
         data = json.loads(json_data)
 
         while True:

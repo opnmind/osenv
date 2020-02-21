@@ -15,6 +15,7 @@ Later:
 import argparse
 import signal
 import sys
+import os
 
 from lib import __version__, _program, _description
 from lib.osenv_controller import OSEnvController
@@ -51,6 +52,8 @@ if __name__ == "__main__":
         prog=_program, description=_description
     )
 
+    home_dir = os.path.expanduser('~/')
+
     ###
     group = parser.add_mutually_exclusive_group(required=True)
 
@@ -82,7 +85,7 @@ if __name__ == "__main__":
         "-r",
         "--read",
         nargs="?",
-        const="~/.ostackrc.enc",
+        const=home_dir + ".ostackrc.enc",
         metavar="<encoded-file>",
         help="""Read encoded file and set content to session variables.
         Default filename is ~/.ostackrc.enc.""",
@@ -91,7 +94,7 @@ if __name__ == "__main__":
         "-w",
         "--write",
         nargs="?",
-        const="~/.ostackrc.enc",
+        const=home_dir + ".ostackrc.enc",
         type=str,
         metavar="<encoded-file>",
         help="""Create and write encoded file with multiple ostackrc
@@ -101,7 +104,7 @@ if __name__ == "__main__":
         "-i",
         "--edit",
         nargs="?",
-        const="~/.ostackrc.enc",
+        const=home_dir + ".ostackrc.enc",
         metavar="<encoded-file>",
         help="""Edit a encoded file and write it back.
         Default filename is ~/.ostackrc.enc.""",
