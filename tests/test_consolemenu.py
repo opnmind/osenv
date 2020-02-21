@@ -29,8 +29,8 @@ class TestConsolemenu(unittest.TestCase):
         "unittest_OS_AUTH_URL",
         "unittest_S3_ACCESS_KEY_ID",
         "unittest_S3_HOSTNAME",
-        2,
-        3
+        3,
+        4
         ])
     @patch('getpass.getpass', side_effect=[
         "unittest_OS_PASSWORD",
@@ -42,7 +42,7 @@ class TestConsolemenu(unittest.TestCase):
         arguments.write = "./unittest.ostackrc.enc"
 
         result = OSEnvController.action_write(arguments)
-        self.assertEqual(os.path.exists(arguments.write), 2)
+        self.assertEqual(os.path.exists(arguments.write), 1)
         st = os.stat(arguments.write)
         self.assertGreaterEqual(oct(st.st_mode), "0o100600")
         self.assertTrue(result)
