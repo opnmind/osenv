@@ -42,7 +42,7 @@ class TestConsolemenu(unittest.TestCase):
         arguments.write = "./unittest.ostackrc.enc"
 
         result = OSEnvController.action_write(arguments)
-        self.assertEqual(os.path.exists(arguments.write), 1)
+        self.assertEqual(os.path.exists(arguments.write), 2)
         st = os.stat(arguments.write)
         self.assertGreaterEqual(oct(st.st_mode), "0o100600")
         self.assertTrue(result)
