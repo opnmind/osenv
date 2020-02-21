@@ -134,7 +134,6 @@ class OSEnvController:
     def action_write(args):
         i = 0
         data = []
-        selection_list = ["Add a new OpenStack Environment"]
 
         encoded_file = os.path.expanduser(args.write)
 
@@ -145,9 +144,12 @@ class OSEnvController:
                     env = next(iter(osenv)).split("_")[0]
                     env_list.append("Delete {0} environment.".format(env))
             
+            selection_list = ["Add a new OpenStack Environment"]
             selection_list.extend(env_list)
             selection_list.append("Encode and write file {file}.".format(file=encoded_file))
             selection = SelectionMenu.get_selection(selection_list)
+
+            i = len(env_list)
 
             if selection == 0:
                 osenv = input(
@@ -155,11 +157,14 @@ class OSEnvController:
                 )
                 data.append(json.loads(OSEnvController.add_tenant(name=osenv)))
                 #i += 1
-
-            elif selection == 1:
+            elif selection > 0 and selection <= i:
+                if not input("Are you sure? (y/n): ").lower().strip()[:1] == "y": break
+                data.pop(selection - 1)
+            elif selection == len(env_list) + 1:
                 print("Encrypt and write file...")
                 crypto = FileEncryption()
                 crypto.encrypt_configfile(data=json.dumps(data), output_file=encoded_file)
+                #crypto.encrypt_configfile(data=json.dumps(data), output_file=args.edit, key=userkey)
 
                 if not os.path.isfile(encoded_file):
                     print("{0} file not found.".format(encoded_file))
@@ -174,7 +179,7 @@ class OSEnvController:
                 print("Finish")
                 return True
                 
-            elif selection == 2:
+            elif selection == len(env_list) + 2:
                 print("Program termination ...")
                 # break
                 # print(json.dumps(data))
